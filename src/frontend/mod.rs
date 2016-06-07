@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Mooneye GB.  If not, see <http://www.gnu.org/licenses/>.
 use glium::{Api, GliumCreationError, Surface, SwapBuffersError, Version};
-use glium_sdl2::{Display, DisplayBuild};
+use glium_sdl2::{Display, DisplayBuild, GliumSdl2Error};
 use sdl2;
 use sdl2::{Sdl, EventPump, VideoSubsystem};
 use sdl2::controller::{Axis, Button};
@@ -30,7 +30,7 @@ use time::{Duration, SteadyTime};
 use url::Url;
 
 use config::{Bootrom, Cartridge, HardwareConfig};
-use emulation::{EmuTime, MachineCycles, EE_VSYNC};
+use emulation::{EmuTime, EmuDuration, EE_VSYNC};
 use gameboy;
 use machine::{Machine, PerfCounter};
 use self::fps::FpsCounter;
@@ -78,19 +78,20 @@ impl FrontendState {
 #[derive(Clone, Debug)]
 pub enum FrontendError {
   Sdl(String),
-  Renderer(String)
+  Renderer(String),
+  Other(String)
 }
 
 pub type FrontendResult<T> = Result<T, FrontendError>;
 
-impl From<sdl2::ErrorMessage> for FrontendError {
-  fn from(e: sdl2::ErrorMessage) -> FrontendError {
+impl From<sdl2::IntegerOrSdlError> for FrontendError {
+  fn from(e: sdl2::IntegerOrSdlError) -> FrontendError {
     FrontendError::Sdl(format!("{:?}", e))
   }
 }
 
-impl From<GliumCreationError<sdl2::ErrorMessage>> for FrontendError {
-  fn from(e: GliumCreationError<sdl2::ErrorMessage>) -> FrontendError {
+impl From<GliumCreationError<GliumSdl2Error>> for FrontendError {
+  fn from(e: GliumCreationError<GliumSdl2Error>) -> FrontendError {
     FrontendError::Renderer(format!("{:?}", e))
   }
 }
@@ -101,11 +102,18 @@ impl From<SwapBuffersError> for FrontendError {
   }
 }
 
+impl From<String> for FrontendError {
+  fn from(e: String) -> FrontendError {
+    FrontendError::Other(e)
+  }
+}
+
 impl Error for FrontendError {
   fn description(&self) -> &str {
     match *self {
       FrontendError::Sdl(ref msg) => msg,
-      FrontendError::Renderer(ref msg) => msg
+      FrontendError::Renderer(ref msg) => msg,
+      FrontendError::Other(ref msg) => msg
     }
   }
 }
@@ -114,7 +122,8 @@ impl fmt::Display for FrontendError {
   fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
     match *self {
       FrontendError::Sdl(ref msg) => f.write_str(msg),
-      FrontendError::Renderer(ref msg) => f.write_str(msg)
+      FrontendError::Renderer(ref msg) => f.write_str(msg),
+      FrontendError::Other(ref msg) => f.write_str(msg)
     }
   }
 }
@@ -287,7 +296,8 @@ impl SdlFrontend {
 
       fps_counter.update(self.times.last_time);
       screen.fps = fps_counter.get_fps();
-      screen.perf = 100.0 * perf_counter.get_cps() / gameboy::CPU_SPEED_HZ as f64;
+      screen.perf =
+        100.0 * perf_counter.get_clock_edges_per_s() / 2.0 / gameboy::CPU_SPEED_HZ as f64;
 
       for event in self.event_pump.poll_iter() {
         match event {
@@ -332,14 +342,14 @@ impl SdlFrontend {
         }
       }
 
-      let cycles =
+      let clock_edges =
         if turbo {
-          MachineCycles((gameboy::CPU_SPEED_HZ / 4) as u32 / 60)
+          EmuDuration::clock_cycles(gameboy::CPU_SPEED_HZ as u32 / 60)
         } else {
-          MachineCycles((delta * (gameboy::CPU_SPEED_HZ as i32 / 4)).num_seconds() as u32)
+          EmuDuration::clock_cycles((delta * gameboy::CPU_SPEED_HZ as i32).num_seconds() as u32)
         };
 
-      let target_time = emu_time + cycles;
+      let target_time = emu_time + clock_edges;
       loop {
         let (events, end_time) = machine.emulate(target_time);
 

@@ -15,45 +15,42 @@
 // along with Mooneye GB.  If not, see <http://www.gnu.org/licenses/>.
 use std::ops::{Add, Sub};
 
-use super::MachineCycles;
+use super::EmuDuration;
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub struct EmuTime {
-  cycles: MachineCycles
+  clock_edges: u32
 }
 
-const REWIND_THRESHOLD: MachineCycles = MachineCycles(0x80000000);
+const REWIND_THRESHOLD: u32 = 0x80000000;
 
 impl EmuTime {
-  pub fn zero() -> EmuTime { EmuTime::new(MachineCycles(0)) }
-  pub fn new(cycles: MachineCycles) -> EmuTime {
-    EmuTime { cycles: cycles }
-  }
-  pub fn cycles(&self) -> MachineCycles { self.cycles }
-  pub fn tick(&mut self) {
-    self.cycles = self.cycles + MachineCycles(1);
+  pub fn zero() -> EmuTime { EmuTime { clock_edges: 0 } }
+  pub fn tick(&mut self, amount: EmuDuration) {
+    *self = *self + amount
   }
   pub fn needs_rewind(&self) -> bool {
-    self.cycles >= REWIND_THRESHOLD
+    self.clock_edges >= REWIND_THRESHOLD
   }
   pub fn rewind(&mut self) {
     assert!(self.needs_rewind());
-    self.cycles = self.cycles - REWIND_THRESHOLD;
+    self.clock_edges = self.clock_edges - REWIND_THRESHOLD;
   }
+  pub fn as_duration(&self) -> EmuDuration { EmuDuration::clock_edges(self.clock_edges) }
 }
 
-impl Add<MachineCycles> for EmuTime {
+impl Add<EmuDuration> for EmuTime {
   type Output = EmuTime;
-  fn add(self, rhs: MachineCycles) -> EmuTime {
+  fn add(self, rhs: EmuDuration) -> EmuTime {
     EmuTime {
-      cycles: self.cycles + rhs
+      clock_edges: self.clock_edges + rhs.as_clock_edges()
     }
   }
 }
 
 impl Sub for EmuTime {
-  type Output = MachineCycles;
-  fn sub(self, rhs: EmuTime) -> MachineCycles {
-    self.cycles - rhs.cycles
+  type Output = EmuDuration;
+  fn sub(self, rhs: EmuTime) -> EmuDuration {
+    EmuDuration::clock_edges(self.clock_edges - rhs.clock_edges)
   }
 }

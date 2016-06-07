@@ -36,19 +36,31 @@ There's tons of documentation and tons of emulators in the internet, but in the 
 
 All test ROMs are manually run with these devices:
 
-| Device              | Model          | Mainboard    | CPU         |
-| ------------------- | -------------- | ------------ | ----------- |
-| Game Boy            | DMG-01         | DMG-CPU-04   | DMG CPU B   |
-| Game Boy Pocket     | MGB-001        | MGB-ECPU-01  | CPU MGB     |
-| Game Boy Pocket     | MGB-001        | MGB-LCPU-01  | CPU MGB     |
-| Super Game Boy      | SNSP-A-SG(UKV) | SGB-R-10     | SGB-CPU-01  |
-| Super Game Boy 2    | SHVC-SGB2-JPN  | SHVC-SGB2-01 | CPU SGB2    |
-| Game Boy Color      | CGB-001        | CGB-CPU-03   | CPU CGB C   |
-| Game Boy Color      | CGB-001        | CGB-CPU-04   | CPU CGB D   |
-| Game Boy Color      | CGB-001        | CGB-CPU-05   | CPU CGB D   |
-| Game Boy Advance    | AGB-001        | AGB-CPU-10   | CPU AGB A   |
-| Game Boy Advance SP | AGS-001        | C/AGS-CPU-21 | CPU AGB B E |
-| Game Boy Advance SP | AGS-101        | C/AGT-CPU-01 | CPU AGB B E |
+| Device              | Model    | Mainboard    | CPU         |
+| ------------------- | -------- | ------------ | ----------- |
+| Game Boy            | DMG-01   | DMG-CPU-04   | DMG CPU B   |
+| Game Boy Pocket     | MGB-001  | MGB-ECPU-01  | CPU MGB     |
+| Game Boy Pocket     | MGB-001  | MGB-LCPU-01  | CPU MGB     |
+| Super Game Boy      | SNSP-027 | SGB-R-10     | SGB-CPU-01  |
+| Super Game Boy      | SHVC-027 | SGB-R-10     | SGB-CPU-01  |
+| Super Game Boy 2    | SHVC-042 | SHVC-SGB2-01 | CPU SGB2    |
+| Game Boy Color      | CGB-001  | CGB-CPU-03   | CPU CGB C   |
+| Game Boy Color      | CGB-001  | CGB-CPU-04   | CPU CGB D   |
+| Game Boy Color      | CGB-001  | CGB-CPU-05   | CPU CGB D   |
+| Game Boy Advance    | AGB-001  | AGB-CPU-10   | CPU AGB A   |
+| Game Boy Advance SP | AGS-001  | C/AGS-CPU-21 | CPU AGB B E |
+| Game Boy Advance SP | AGS-101  | C/AGT-CPU-01 | CPU AGB B E |
+
+These devices will also be used, but results for old tests have not yet been verified:
+
+| Device              | Model    | Mainboard    | CPU         |
+| ------------------- | -------- | ------------ | ----------- |
+| Game Boy            | DMG-01   | DMG-CPU-02   | DMG CPU A   |
+| Game Boy            | DMG-01   | DMG-CPU-06   | DMG CPU B   |
+| Game Boy Color      | CGB-001  | CGB-CPU-02   | CPU CGB B   |
+| Game Boy Color      | CGB-001  | CGB-CPU-06   | CPU CGB E   |
+| Game Boy Advance    | AGB-001  | AGB-CPU-01   | CPU AGB     |
+
 
 **For now, the focus is on DMG/MGB/SGB/SGB2 emulation, so not all tests pass on CGB/AGB/AGS or emulators emulating those devices.**
 
@@ -101,7 +113,7 @@ Versions used:
 * BGB 1.5.2
 * Gambatte 2015-03-23 (f9fb003)
 * GiiBiiAdvance 2015-05-16 (dbf669a)
-* Higan v097 (in Game Boy mode, except for SGB/SGB2-specific test ROMs)
+* Higan v098 (in Game Boy mode, except for SGB/SGB2-specific test ROMs)
 * KiGB 2.05
 * MESS 0.163
 
@@ -120,7 +132,7 @@ Versions used:
 | Test                    | mooneye-gb | BGB  | Gambatte | GiiBiiAdvance | Higan | KiGB | MESS |
 | ----------------------- | ---------- | ---- | -------- | ------------- | ------| ---- | ---- |
 | add sp e timing         | :+1:       | :x:  | :+1:     | :x:           | :+1:  | :x:  | :x:  |
-| boot hwio G             | :+1:       | :+1: | :+1:     | :x:           | :x:   | :x:  | :x:  |
+| boot hwio G             | :+1:       | :+1: | :+1:     | :x:           | :+1:  | :x:  | :x:  |
 | boot regs dmg           | :+1:       | :+1: | :+1:     | :+1:          | :+1:  | :+1: | :+1: |
 | call timing             | :+1:       | :x:  | :+1:     | :x:           | :+1:  | :x:  | :x:  |
 | call timing2            | :+1:       | :x:  | :+1:     | :x:           | :+1:  | :x:  | :x:  |
@@ -133,7 +145,7 @@ Versions used:
 | halt ime0 nointr_timing | :+1:       | :+1: | :+1:     | :+1:          | :+1:  | :x:  | :x:  |
 | halt ime1 timing        | :+1:       | :+1: | :+1:     | :+1:          | :+1:  | :x:  | :+1: |
 | halt ime1 timing2 GS    | :+1:       | :+1: | :+1:     | :x:           | :+1:  | :x:  | :+1: |
-| if ie registers         | :+1:       | :+1: | :+1:     | :+1:          | :x:   | :x:  | :+1: |
+| if ie registers         | :+1:       | :+1: | :+1:     | :+1:          | :+1:  | :x:  | :+1: |
 | intr timing             | :+1:       | :+1: | :+1:     | :+1:          | :+1:  | :x:  | :+1: |
 | jp timing               | :+1:       | :x:  | :+1:     | :x:           | :+1:  | :x:  | :x:  |
 | jp cc timing            | :+1:       | :x:  | :+1:     | :x:           | :+1:  | :x:  | :x:  |
@@ -169,14 +181,26 @@ Versions used:
 | intr 2 mode3 timing         | :+1:       | :+1: | :x:      | :x:           | :x:   | :x:  | :x:  |
 | intr 2 oam ok timing        | :+1:       | :+1: | :x:      | :x:           | :x:   | :x:  | :x:  |
 | intr 2 mode0 timing sprites | :x:        | :x:  | :x:      | :x:           | :x:   | :x:  | :x:  |
+| stat irq blocking           | :x:        | :x:  | :+1:     | :x:           | :x:   | :x:  | :x:  |
 | vblank stat intr GS         | :+1:       | :+1: | :x:      | :+1:          | :+1:  | :x:  | :x:  |
 
 #### Timer
 
-| Test         | mooneye-gb | BGB  | Gambatte | GiiBiiAdvance | Higan | KiGB | MESS |
-| ------------ | ---------- | ---- | -------- | ------------- | ------| ---- | ---- |
-| div write    | :x:        | :+1: | :x:      | :+1:          | :+1:  | :x:  | :x:  |
-| rapid toggle | :x:        | :x:  | :x:      | :+1:          | :x:   | :x:  | :+1: |
+| Test                 | mooneye-gb | BGB  | Gambatte | GiiBiiAdvance | Higan  | KiGB | MESS |
+| -------------------- | ---------- | ---- | -------- | ------------- | ------ | ---- | ---- |
+| div write            | :x:        | :+1: | :x:      | :+1:          | :+1:   | :x:  | :x:  |
+| rapid toggle         | :x:        | :x:  | :x:      | :+1:          | :x:    | :x:  | :+1: |
+| tim00 div trigger    | :+1:       | :x:  | :+1:     | :+1:          | :x:    | :x:  | :x:  |
+| tim00                | :x:        | :+1: | :x:      | :+1:          | :+1:   | :x:  | :x:  |
+| tim01 div trigger    | :x:        | :+1: | :x:      | :+1:          | :x:    | :x:  | :x:  |
+| tim01                | :+1:       | :+1: | :+1:     | :+1:          | :+1:   | :x:  | :x:  |
+| tim10 div trigger    | :x:        | :+1: | :x:      | :+1:          | :x:    | :x:  | :+1: |
+| tim10                | :x:        | :+1: | :x:      | :+1:          | :+1:   | :x:  | :x:  |
+| tim11 div trigger    | :+1:       | :x:  | :x:      | :+1:          | :x:    | :x:  | :x:  |
+| tim11                | :x:        | :+1: | :x:      | :+1:          | :+1:   | :x:  | :x:  |
+| tima reload          | :x:        | :x:  | :x:      | :+1:          | :x:    | :x:  | :x:  |
+| tima write reloading | :x:        | :x:  | :x:      | :+1:          | :x:    | :x:  | :x:  |
+| tma write reloading  | :x:        | :x:  | :x:      | :+1:          | :x:    | :x:  | :x:  |
 
 ### Mooneye GB emulator-only tests
 
@@ -195,7 +219,7 @@ Versions used:
 | Test            | mooneye-gb | BGB  | Gambatte | GiiBiiAdvance | Higan | KiGB | MESS |
 | --------------- | ---------- | ---- | -------- | ------------- | ----- | ---- | ---- |
 | boot hwio C     |            | :+1: |          | :x:           |       | :x:  | :x:  |
-| boot hwio S     |            | :x:  |          | :x:           | :x:   | :x:  | :x:  |
+| boot hwio S     |            | :x:  |          | :x:           | :+1:  | :x:  | :x:  |
 | boot regs A     |            | :x:  |          | :x:           |       | :x:  |      |
 | boot regs cgb   |            | :+1: |          | :x:           |       | :x:  | :+1: |
 | boot regs mgb   |            | :+1: |          | :+1:          |       |      | :+1: |
