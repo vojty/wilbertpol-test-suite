@@ -50,6 +50,7 @@ _delay_long_time_\@:
   .ifdef ACCEPTANCE_TEST
     .db $ED ; Magic undefined opcode
   .endif
+  ld b, b   ; Magic breakpoint
 - nop
   jr -
 .endm
