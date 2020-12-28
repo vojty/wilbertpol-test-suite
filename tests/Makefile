@@ -29,11 +29,11 @@ all: $(addprefix $(BUILD_PATH)/, $(patsubst %.s,%.gb, $(SRC)))
 
 $(BUILD_PATH)/%.o: %.s common/*.s
 	@mkdir -p $(BUILD_PATH)/$(dir $<)
-	@cd $(dir $<) && $(WLA) -o $(WLAFLAGS) $(notdir $<) $(abspath $@)
+	@cd $(dir $<) && $(WLA) -o $(abspath $@) $(WLAFLAGS) $(notdir $<)
 
 $(BUILD_PATH)/%.link: $(BUILD_PATH)/%.o
 	@mkdir -p $(dir $<)
-	@echo "[objects]\n$(notdir $<)" > $@
+	@echo -e "[objects]\n$(notdir $<)" > $@
 
 $(BUILD_PATH)/%.gb: $(BUILD_PATH)/%.link
 	@mkdir -p $(dir $<)

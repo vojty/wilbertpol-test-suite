@@ -17,8 +17,8 @@
 .incdir "../../../common"
 .include "common.s"
 
-.macro test
-  ld (\1), a
+.macro test ARGS addr
+  ld (addr), a
 .endm
 
   di
