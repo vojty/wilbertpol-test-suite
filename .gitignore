@@ -1,10 +1,7 @@
 *~
-*.swp
+*.bak
 *.gb
 *.o
-*.link
-imgui.ini
-/roms
-/target
-/Cargo.lock
-/*.dll
+*.swp
+/build/
+/tags
