@@ -24,7 +24,6 @@
 ;   fail: 
 ;   not checked: DMG, SGB, SGB2, AGB
 
-.incdir "../../common"
 .include "common.s"
 
   xor a
@@ -111,14 +110,14 @@ test_finish:
   ld a,(round6) 
   ld l,a
 
-  save_results
+  setup_assertions
   assert_b $e0
   assert_c $e1
   assert_d $e1
   assert_e 144
   assert_h 145
 ;  assert_l $81
-  jp process_results
+  quit_check_asserts
 
 wait_vblank_irq:
   wait_ly 142
@@ -128,7 +127,7 @@ wait_vblank_irq:
   ldh (<IF),a
   ei
   nops 1000
-  test_failure_string "VBLANK_IRQ"
+  quit_failure_string "VBLANK_IRQ"
 
 .org INTR_VEC_VBLANK
   add sp,+2

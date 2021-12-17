@@ -21,7 +21,6 @@
 ;   fail: CGB, AGS
 ;   untested: DMG, SGB, SGB2, AGB
 
-.incdir "../../common"
 .include "common.s"
 
 .macro clear_interrupts
@@ -218,7 +217,7 @@
   testcase_line $40, $40, 0, 0
   testcase_line $00, $40, 2, 2
   
-  test_ok
+  quit_ok
 
 .macro wait_not_mode ARGS mode
 - ldh a, (<STAT)
@@ -346,15 +345,14 @@ run_testcase_line:
   jp test_fail
 
 test_fail_dump:
-  save_results
-  jp process_results
+  setup_assertions
+  quit_check_asserts
 
 test_fail:
-  print_results _test_fail_cb
-_test_fail_cb:
+  quit_inline
   print_string_literal "TEST #"
   ld a, (testcase_id)
-  call print_a
+  call print_hex8
   print_string_literal " FAILED"
   ld d, $42
   ret

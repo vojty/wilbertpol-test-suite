@@ -26,7 +26,6 @@
 ;   pass: CGB, AGS
 ;   fail: DMG
 
-.incdir "../../common"
 .include "common.s"
 
 .macro clear_interrupts
@@ -100,17 +99,17 @@
   perform_test $42 2 3
   perform_test $43 2 3
 
-  test_ok
+  quit_ok
 
 test_fail:
   ld b, a
   ldh a, (<SCX)
-  save_results
+  setup_assertions
   ; A = SCX
   ; B = LY value
   ; D = scanline - 1
   ; E = scanline
-  test_failure_dump
+  quit_failure_dump
 
 standard_delay:
   nops 22
@@ -129,7 +128,7 @@ setup_and_wait:
   jp fail_halt
 
 fail_halt:
-  test_failure_string "FAIL: HALT"
+  quit_failure_string "FAIL: HALT"
 
 .org INTR_VEC_STAT
   add sp,+2

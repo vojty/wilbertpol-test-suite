@@ -29,7 +29,6 @@
 ;   fail: ?
 ;   untested: DMG, SGB, SGB2, AGB
 
-.incdir "../../common"
 .include "common.s"
 
 .macro clear_interrupts
@@ -176,7 +175,7 @@
   perform_test_m0 $42 2 3
   perform_test_m0 $43 4 5
 
-  test_ok
+  quit_ok
 
 test_fail4:
   ld h,4
@@ -192,12 +191,12 @@ test_fail1:
 test_fail:
   ld b, a
   ldh a, (<SCX)
-  save_results
+  setup_assertions
   ; A = SCX
   ; B = LY value
   ; D = scanline - 1
   ; E = scanline
-  test_failure_dump
+  quit_failure_dump
 
 standard_m0_delay:
   xor a
@@ -223,7 +222,7 @@ setup:
 
 
 fail_halt:
-  test_failure_string "FAIL: HALT"
+  quit_failure_string "FAIL: HALT"
 
 .org INTR_VEC_STAT
   add sp,+2

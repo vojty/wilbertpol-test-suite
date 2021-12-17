@@ -22,7 +22,6 @@
 ;   pass: MGB, CGB, AGS
 ;   fail: -
 
-.incdir "../../common"
 .include "common.s"
 
 .macro clear_interrupts
@@ -59,12 +58,12 @@
   call setup_and_wait_mode2_before_int
   ld b, c
   call setup_and_wait_mode2_after_int
-  save_results
+  setup_assertions
   assert_b $02
   assert_c $01
   assert_d $03
   assert_e $00
-  jp process_results
+  quit_check_asserts
 
 setup_and_wait_mode2:
   wait_ly $42
@@ -103,7 +102,7 @@ setup_and_wait_mode2_after_int:
   test_mode2_irq 66
 
 fail_halt:
-  test_failure_string "FAIL: HALT"
+  quit_failure_string "FAIL: HALT"
 
 .org INTR_VEC_STAT
   add sp,+2

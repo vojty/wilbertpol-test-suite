@@ -22,7 +22,6 @@
 ;   pass: DMG, MGB, SGB, SGB2, CGB, AGB, AGS
 ;   fail: -
 
-.incdir "../../common"
 .include "common.s"
 
 .macro clear_interrupts
@@ -257,7 +256,7 @@ _testcase_end_\@:
   testcase 22,   73, 65, 57, 49, 41, 33, 25, 17, 9,  1
   ; ==> sprite order does not affect cycles
 
-  test_ok
+  quit_ok
 
 run_testcase:
   push de
@@ -371,35 +370,26 @@ setup_and_wait_mode2:
   nops 200
   jp fail_halt
 
-clear_oam:
-  ; Clear OAM
-  ld hl, OAM
-  ld bc, $a0
-  xor a
-  jp memset
-
 test_fail_a:
-  print_results _test_fail_a_cb
-_test_fail_a_cb:
+  quit_inline
   print_string_literal "TEST A #"
   ld a, (testcase_id)
-  call print_a
+  call print_hex8
   print_string_literal " FAILED"
   ld d, $42
   ret
 
 test_fail_b:
-  print_results _test_fail_b_cb
-_test_fail_b_cb:
+  quit_inline
   print_string_literal "TEST B #"
   ld a, (testcase_id)
-  call print_a
+  call print_hex8
   print_string_literal " FAILED"
   ld d, $42
   ret
 
 fail_halt:
-  test_failure_string "FAIL: HALT"
+  quit_failure_string "FAIL: HALT"
 
 .org INTR_VEC_STAT
   add sp,+2

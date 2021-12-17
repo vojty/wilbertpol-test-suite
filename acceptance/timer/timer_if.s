@@ -24,7 +24,6 @@
 ;   fail: ?
 ;   not tested: DMG, SGB, SGB2, AGB
 
-.incdir "../../common"
 .include "common.s"
 
 test:
@@ -131,14 +130,14 @@ test_round6:
   ld a,(round6)
   ld c,a
 
-  save_results
+  setup_assertions
   assert_b $fe
   assert_c $ff
   assert_d $e0
   assert_e $e4
   assert_h $fe
   assert_l $ff
-  jp process_results
+  quit_check_asserts
 
 wait_timer_irq:
   ld a,INTR_TIMER
@@ -147,7 +146,7 @@ wait_timer_irq:
   ldh (<IF),a
   ei
   nops 1000
-  test_failure_string "TIMER_IRQ"
+  quit_failure_string "TIMER_IRQ"
 
 wait_timer_irq_halt:
   ld a,INTR_TIMER
@@ -158,7 +157,7 @@ wait_timer_irq_halt:
   nop
   halt
   nop
-  test_failure_string "TIMER_IRQ"
+  quit_failure_string "TIMER_IRQ"
 
 .org INTR_VEC_TIMER
   add sp,+2
