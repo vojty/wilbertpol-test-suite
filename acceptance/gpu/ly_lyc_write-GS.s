@@ -24,7 +24,6 @@
 ;   fail: CGB, AGS
 ;   not checked: DMG, SGB, SGB2, AGB
 
-.incdir "../../common"
 .include "common.s"
 
   di
@@ -190,7 +189,7 @@ test_finish:
   ld l,a
   ld a,(round7)
 
-  save_results
+  setup_assertions
   assert_a 7
   assert_b 0
   assert_c 1
@@ -198,7 +197,7 @@ test_finish:
   assert_e 0
   assert_h $C2
   assert_l $C2
-  jp process_results
+  quit_check_asserts
 
 .org INTR_VEC_STAT
   inc b

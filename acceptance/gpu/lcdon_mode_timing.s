@@ -24,7 +24,6 @@
 ;   fail: 
 ;   not checked: DMG, SGB, SGB2, AGB
 
-.incdir "../../common"
 .include "common.s"
 
   xor a
@@ -137,7 +136,7 @@ test_finish:
   ld l,a
   pop af
 
-  save_results
+  setup_assertions
   assert_a $80
   assert_f $30
   assert_b $83
@@ -146,7 +145,7 @@ test_finish:
   assert_e $82
   assert_h $82
   assert_l $83
-  jp process_results
+  quit_check_asserts
 
 .ramsection "Test-State" slot 2
   round1 db
