@@ -5,3 +5,4 @@
 *.swp
 /build/
 /tags
+.DS_Store
