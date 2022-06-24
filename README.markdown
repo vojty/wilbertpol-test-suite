@@ -6,6 +6,15 @@ The tests can be downloaded from [here](https://nightly.link/vojty/wilbertpol-te
 
 ## Build
 
+### Using Docker
+
+```
+make image
+make generate
+```
+
+### Local build
+
 ```
 make clean all
 ```

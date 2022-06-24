@@ -53,4 +53,15 @@ tags: common/*.s $(BUILD_PATH)/flags
 clean:
 	@rm -rf $(BUILD_PATH)
 
+image:
+	@docker build -t wla-dx-builder .
+
+generate:
+	@docker run --rm --name wla-dx-builder \
+		--user $$(id -u):$$(id -g) \
+		-v ${PWD}:/tests \
+		--entrypoint sh \
+		--workdir /tests wla-dx-builder \
+		-c /tests/generate.sh
+
 .PHONY: clean all force
