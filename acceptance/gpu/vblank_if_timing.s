@@ -107,8 +107,8 @@ test_finish:
   ld e,a
   ld a,(round5)
   ld h,a
-  ld a,(round6) 
-  ld l,a
+;  ld a,(round6)
+;  ld l,a
 
   setup_assertions
   assert_b $e0
