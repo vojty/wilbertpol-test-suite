@@ -93,10 +93,6 @@ test_finish:
   ld d,a
   ld a,(round4)
   ld e,a
-  ld a,(round5)
-  ld h,a
-  ld a,(round6) 
-  ld l,a
 
   setup_assertions
   assert_b $e0

@@ -99,15 +99,15 @@ test_round7:
 test_finish:
   ld a,(round1)
   ld b,a
-  ld a,(round2)
-  ld c,a
-  ld a,(round3)
-  ld d,a
-  ld a,(round4)
-  ld e,a
+;  ld a,(round2)
+;  ld c,a
+;  ld a,(round3)
+;  ld d,a
+;  ld a,(round4)
+;  ld e,a
   ld a,(round5)
   ld h,a
-  ld a,(round6) 
+  ld a,(round6)
   ld l,a
   ld a,(round7)
 
